@@ -19,18 +19,19 @@ function BookList() {
             <h1>Books</h1>
             <br />
             {books.map((b) =>
-                <div id="projectCard">
+                <div id="projectCard" className="card" key={b.bookId}>
                     <h3>{b.title}</h3>
-
-                    <ul>
-                        <li>Author: {b.author}</li>
-                        <li>Publisher: {b.publisher}</li>
-                        <li>ISBN: {b.isbn}</li>
-                        <li>Classification: {b.classification}</li>
-                        <li>Category: {b.category}</li>
-                        <li>Page Count: {b.pageCount}</li>
-                        <li>Price: {b.price}</li>
+                    <div className="card-body">
+                    <ul className ="list-unstyled">
+                        <li><strong>Author:</strong> {b.author}</li>
+                        <li><strong>Publisher:</strong> {b.publisher}</li>
+                        <li><strong>ISBN:</strong> {b.isbn}</li>
+                        <li><strong>Classification:</strong> {b.classification}</li>
+                        <li><strong>Category:</strong> {b.category}</li>
+                        <li><strong>Page Count:</strong> {b.pageCount}</li>
+                        <li><strong>Price:</strong> {b.price}</li>
                     </ul>
+                    </div>
                 </div>
         
         

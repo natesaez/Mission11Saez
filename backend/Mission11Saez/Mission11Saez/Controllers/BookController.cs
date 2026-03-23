@@ -14,7 +14,10 @@ namespace Mission11Saez.API.Controllers
 
         public IEnumerable<Book> GetBooks()
         {
-            var something = _bookContext.Books.ToList();
+            
+            var something = _bookContext.Books
+                .Take(5)
+                .ToList();
             return something;
         }
     } 
