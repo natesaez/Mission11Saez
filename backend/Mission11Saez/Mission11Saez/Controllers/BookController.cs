@@ -12,19 +12,27 @@ namespace Mission11Saez.API.Controllers
 
         public BookController(BookDbContext temp) => _bookContext = temp;
 
-        public IActionResult GetBooks(int pageSize = 10, int pageNum = 1)
+        [HttpGet]
+        public IActionResult GetBooks(int pageSize = 10, int pageNum = 1, string sortBy = "titleAsc")
         {
-            
-            var something = _bookContext.Books
-                .Skip((pageNum-1) * pageSize)
+            var query = _bookContext.Books.AsQueryable();
+
+            query = sortBy switch
+            {
+                "titleDesc" => query.OrderByDescending(b => b.Title),
+                _ => query.OrderBy(b => b.Title)
+            };
+
+            var totalBooks = query.Count();
+
+            var books = query
+                .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
-            
-            var totalBooks = _bookContext.Books.Count();
-            
+
             return Ok(new
             {
-                Books = something,
+                Books = books,
                 TotalBooks = totalBooks
             });
         }

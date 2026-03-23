@@ -11,18 +11,20 @@ function BookList() {
 
     const [totalItems, setTotalItems] = useState<number>(0);
 
-    const [totalPages, setTotalPages] = useState<number>(0);
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    const [sortBy, setSortBy] = useState<string>('titleAsc');
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const response = await fetch(`https://localhost:5000/api/book?pageSize=${pageSize}&pageNum=${pageNum}`);
+            const response = await fetch(`https://localhost:5000/api/book?pageSize=${pageSize}&pageNum=${pageNum}&sortBy=${sortBy}`);
             const data = await response.json();
             setBooks(data.books);
             setTotalItems(data.totalBooks)
-            setTotalPages(Math.ceil(totalItems / pageSize));
+
         };
         fetchBooks();
-    }, [pageSize, pageNum]);
+    }, [pageSize, pageNum, sortBy]);
 
     return (
         <>
@@ -46,36 +48,57 @@ function BookList() {
         
         )}
         <br />
-        <button disabled={pageNum === 1} onClick={() => setPageNum(pageNum - 1)}>Previous</button>
+        <div className="d-flex justify-content-center align-items-center gap-2 mt-3">
 
-        {
-            [...Array(totalPages)].map((_, i) => (
-                <button key={i + 1} onClick={() => setPageNum(i + 1)} disabled={pageNum === i + 1}>
-                    {i +1}
-                </button>
-            ))
-        }
+    <button
+        className="btn btn-secondary"
+        disabled={pageNum === 1}
+        onClick={() => setPageNum(pageNum - 1)}
+    >Previous</button>
 
-        <button disabled={pageNum === totalPages} onClick={() => setPageNum(pageNum + 1)}>Next</button>
+    {[...Array(totalPages)].map((_, i) => (
+        <button key={i + 1} className={`btn ${pageNum === i + 1 ? 'btn-dark' : 'btn-outline-dark'}`} onClick={() => setPageNum(i + 1)} disabled={pageNum === i + 1}>
+        {i + 1}</button>))}
 
+    <button
+        className="btn btn-secondary"
+        disabled={pageNum === totalPages}
+        onClick={() => setPageNum(pageNum + 1)}>Next</button>
+</div>
+<div className="text-center mt-3">
+<label className="me-2">Results per page:</label>
+<select
+    className="form-select d-inline w-auto"
+    value={pageSize}
+    onChange={(p) => {
+    setPageSize(Number(p.target.value));
+    setPageNum(1);
+    }}>
+    <option value="1">1</option>
+    <option value="5">5</option>
+    <option value="10">10</option>
+    <option value="15">15</option>
+    <option value="20">20</option>
+</select>
+</div>
 
-        <br />
-        <br />
-        <label>
-            Results per page:
-            <select value={pageSize} onChange={(p) => {
-                setPageSize(Number(p.target.value));
-                setPageNum(1);
-            }}>
-                <option value="1">1</option>
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-            </select>
-        </label>
-        <br />
-        <br />
+<br />
+
+<div className="text-center mt-3">
+    <label className="me-2">Sort by title:</label>
+    <select
+        className="form-select d-inline w-auto"
+        value={sortBy}
+        onChange={(e) => {
+        setSortBy(e.target.value);
+        setPageNum(1);
+        }}>
+        <option value="titleAsc">A to Z</option>
+        <option value="titleDesc">Z to A</option>
+    </select>
+</div>
+
+<br />
         </>
     );
 }
