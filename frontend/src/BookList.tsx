@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Book } from './types/Book';
 
-function BookList() {
-    // testing out git branch
+function BookList({selectedCategories}:{selectedCategories: string[]}) {
 
     const [books, setBooks] = useState<Book[]>([]);
 
@@ -18,19 +17,22 @@ function BookList() {
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const response = await fetch(`https://localhost:5000/api/book?pageSize=${pageSize}&pageNum=${pageNum}&sortBy=${sortBy}`);
+
+            const categoryParams = selectedCategories
+            .map((cat) => `categories=${encodeURIComponent(cat)}`)
+            .join('&');
+
+            const response = await fetch(`https://localhost:5000/api/book?pageSize=${pageSize}&pageNum=${pageNum}&sortBy=${sortBy}${selectedCategories.length ? `&${categoryParams}` : ''}`);
             const data = await response.json();
             setBooks(data.books);
             setTotalItems(data.totalBooks)
 
         };
         fetchBooks();
-    }, [pageSize, pageNum, sortBy]);
+    }, [pageSize, pageNum, sortBy, selectedCategories]);
 
     return (
         <>
-            <h1>Books</h1>
-            <br />
             {books.map((b) =>
                 <div id="projectCard" className="card" key={b.bookId}>
                     <h3>{b.title}</h3>

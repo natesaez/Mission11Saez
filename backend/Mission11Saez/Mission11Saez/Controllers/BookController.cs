@@ -13,17 +13,23 @@ namespace Mission11Saez.API.Controllers
         public BookController(BookDbContext temp) => _bookContext = temp;
 
         [HttpGet]
-        public IActionResult GetBooks(int pageSize = 10, int pageNum = 1, string sortBy = "titleAsc")
+        public IActionResult GetBooks(int pageSize = 10, int pageNum = 1, string sortBy = "titleAsc", [FromQuery] List<string>? categories = null)
         {
+            
             var query = _bookContext.Books.AsQueryable();
 
+            if (categories != null && categories.Any())
+            {
+                query = query.Where(b => categories.Contains(b.Category));
+            }
+            
+            var totalBooks = query.Count();
+            
             query = sortBy switch
             {
                 "titleDesc" => query.OrderByDescending(b => b.Title),
                 _ => query.OrderBy(b => b.Title)
             };
-
-            var totalBooks = query.Count();
 
             var books = query
                 .Skip((pageNum - 1) * pageSize)
@@ -36,6 +42,17 @@ namespace Mission11Saez.API.Controllers
                 TotalBooks = totalBooks
             });
         }
+
+        [HttpGet("GetBookCategories")]
+            public IActionResult GetBookCategories()
+            {
+                var bookCategories = _bookContext.Books
+                    .Select(b => b.Category)
+                    .Distinct()
+                    .ToList();
+                
+                return Ok(bookCategories);
+            }
     } 
 }
 
