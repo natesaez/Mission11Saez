@@ -32,24 +32,25 @@ function BookList({selectedCategories}:{selectedCategories: string[]}) {
         <>
             {books.map((b) =>
                 <div id="projectCard" className="card" key={b.bookId}>
+                    <div className="card mb-3 shadow-sm" style={{ width: '750px' }}>
                     <h3>{b.title}</h3>
-                    <div className="card-body">
                     <ul className ="list-unstyled">
-                        <li><strong>Author: </strong> {b.author}</li>
-                        <li><strong>Publisher: </strong> {b.publisher}</li>
-                        <li><strong>ISBN: </strong> {b.isbn}</li>
-                        <li><strong>Classification: </strong> {b.classification}</li>
-                        <li><strong>Category: </strong> {b.category}</li>
-                        <li><strong>Page Count: </strong> {b.pageCount}</li>
-                        <li><strong>Price: </strong> {b.price}</li>
+                        <li className="card-text"><strong>Author: </strong> {b.author}</li>
+                        <li className="card-text"><strong>Publisher: </strong> {b.publisher}</li>
+                        <li className="card-text"><strong>ISBN: </strong> {b.isbn}</li>
+                        <li className="card-text"><strong>Classification: </strong> {b.classification}</li>
+                        <li className="card-text"><strong>Category: </strong> {b.category}</li>
+                        <li className="card-text"><strong>Page Count: </strong> {b.pageCount}</li>
+                        <li className="card-text"><strong>Price: </strong> ${b.price}</li>
                     </ul>
 
                     <button 
                     className="btn btn-success" 
                     onClick={() => 
-                    navigate(`/cartconfirmation/${b.title}/${b.bookId}`)}
+                    navigate(`/cartconfirmation/${b.title}/${b.bookId}/${b.price}`)}
                     >Add to Cart</button>
                     </div>
+
                 </div>
         
         )}

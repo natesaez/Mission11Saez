@@ -16,7 +16,7 @@ function App() {
         <Routes>
           <Route path='/' element={<BooksPage />} />
           <Route path="/books" element={<BooksPage />} />
-          <Route path='/cartconfirmation/:title/:bookId' 
+          <Route path='/cartconfirmation/:title/:bookId/:price' 
           element={<CartConfirmation />} />
           <Route path='cart' element={<CartPage />} />
         </Routes>

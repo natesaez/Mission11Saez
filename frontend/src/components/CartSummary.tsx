@@ -7,12 +7,13 @@ const CartSummary = () => {
     const totalAmount = cart.reduce((sum,item) => sum + item.quantity, 0);
 
     return (
-        <div 
+        <div className="badge bg-success fs-4 px-4 py-3 shadow"
         style=
         {{
             position: 'fixed',
             top: '10',
             right: '20px',
+            zIndex: 1000,
             background: '#f8f9fa',
             padding: '10px 15px',
             borderRadius: '8px',
@@ -25,7 +26,8 @@ const CartSummary = () => {
         }}
         onClick={() => navigate('/cart')}
         >
-        🛒 <strong>{totalAmount.toFixed(2)}</strong>
+        🛒   
+        <strong> {totalAmount}</strong>
         </div>
     );
 };
