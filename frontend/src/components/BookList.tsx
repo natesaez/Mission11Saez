@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
-import type { Book } from './types/Book';
+import type { Book } from '../types/Book';
+import { useNavigate } from "react-router-dom";
 
 function BookList({selectedCategories}:{selectedCategories: string[]}) {
 
     const [books, setBooks] = useState<Book[]>([]);
-
     const [pageSize, setPageSize] = useState<number>(10);
-
     const [pageNum, setPageNum] = useState<number>(1);
-
     const [totalItems, setTotalItems] = useState<number>(0);
-
     const totalPages = Math.ceil(totalItems / pageSize);
-
     const [sortBy, setSortBy] = useState<string>('titleAsc');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -38,14 +35,20 @@ function BookList({selectedCategories}:{selectedCategories: string[]}) {
                     <h3>{b.title}</h3>
                     <div className="card-body">
                     <ul className ="list-unstyled">
-                        <li><strong>Author:</strong> {b.author}</li>
-                        <li><strong>Publisher:</strong> {b.publisher}</li>
-                        <li><strong>ISBN:</strong> {b.isbn}</li>
-                        <li><strong>Classification:</strong> {b.classification}</li>
-                        <li><strong>Category:</strong> {b.category}</li>
-                        <li><strong>Page Count:</strong> {b.pageCount}</li>
-                        <li><strong>Price:</strong> {b.price}</li>
+                        <li><strong>Author: </strong> {b.author}</li>
+                        <li><strong>Publisher: </strong> {b.publisher}</li>
+                        <li><strong>ISBN: </strong> {b.isbn}</li>
+                        <li><strong>Classification: </strong> {b.classification}</li>
+                        <li><strong>Category: </strong> {b.category}</li>
+                        <li><strong>Page Count: </strong> {b.pageCount}</li>
+                        <li><strong>Price: </strong> {b.price}</li>
                     </ul>
+
+                    <button 
+                    className="btn btn-success" 
+                    onClick={() => 
+                    navigate(`/cartconfirmation/${b.title}/${b.bookId}`)}
+                    >Add to Cart</button>
                     </div>
                 </div>
         
