@@ -60,3 +60,9 @@
 /Users/nsaez/RiderProjects/Mission11Saez/backend/Mission11Saez/Mission11Saez/bin/Debug/net8.0/runtimes/win-arm64/native/e_sqlite3.dll
 /Users/nsaez/RiderProjects/Mission11Saez/backend/Mission11Saez/Mission11Saez/bin/Debug/net8.0/runtimes/win-x64/native/e_sqlite3.dll
 /Users/nsaez/RiderProjects/Mission11Saez/backend/Mission11Saez/Mission11Saez/bin/Debug/net8.0/runtimes/win-x86/native/e_sqlite3.dll
+/Users/nsaez/RiderProjects/Mission11Saez/backend/Mission11Saez/Mission11Saez/bin/Debug/net8.0/Bookstore.sqlite
+/Users/nsaez/RiderProjects/Mission11Saez/backend/Mission11Saez/Mission11Saez/bin/Debug/net8.0/publish/web.config
+/Users/nsaez/RiderProjects/Mission11Saez/backend/Mission11Saez/Mission11Saez/bin/Debug/net8.0/publish/appsettings.Development.json
+/Users/nsaez/RiderProjects/Mission11Saez/backend/Mission11Saez/Mission11Saez/bin/Debug/net8.0/publish/appsettings.json
+/Users/nsaez/RiderProjects/Mission11Saez/backend/Mission11Saez/Mission11Saez/bin/Debug/net8.0/publish/Mission11Saez.deps.json
+/Users/nsaez/RiderProjects/Mission11Saez/backend/Mission11Saez/Mission11Saez/bin/Debug/net8.0/publish/Mission11Saez.runtimeconfig.json
