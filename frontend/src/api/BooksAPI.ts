@@ -6,7 +6,7 @@ interface FetchBooksResponse {
 
 }
 
-const API_BASE_URL = 'https://localhost:5000/api';
+const API_BASE_URL = 'https://booklist-saez-backend-eefwdtfrcng7abgb.westus2-01.azurewebsites.net/api';
 
 export const fetchBooks = async(
     pageSize: number,
@@ -22,7 +22,7 @@ export const fetchBooks = async(
     .join('&');
 
     const response = await fetch(
-        `https://localhost:5000/api/book?pageSize=${pageSize}&pageNum=${pageNum}&sortBy=${sortBy}${selectedCategories.length ? `&${categoryParams}` : ''}`
+        `${API_BASE_URL}/book?pageSize=${pageSize}&pageNum=${pageNum}&sortBy=${sortBy}${selectedCategories.length ? `&${categoryParams}` : ''}`
     );
 
 if (!response.ok) {
