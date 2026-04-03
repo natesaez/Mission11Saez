@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import type { Book } from '../types/Book';
 import { useNavigate } from "react-router-dom";
+import { fetchBooks } from "../api/BooksAPI";
+import Pagination from "./Pagination";
 
 function BookList({selectedCategories}:{selectedCategories: string[]}) {
 
@@ -8,25 +10,34 @@ function BookList({selectedCategories}:{selectedCategories: string[]}) {
     const [pageSize, setPageSize] = useState<number>(10);
     const [pageNum, setPageNum] = useState<number>(1);
     const [totalItems, setTotalItems] = useState<number>(0);
-    const totalPages = Math.ceil(totalItems / pageSize);
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize) || 1);
     const [sortBy, setSortBy] = useState<string>('titleAsc');
     const navigate = useNavigate();
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchBooks = async () => {
 
-            const categoryParams = selectedCategories
-            .map((cat) => `categories=${encodeURIComponent(cat)}`)
-            .join('&');
+useEffect(() => {
+    const loadBooks = async () => {
+    try {
+        setLoading(true);
+        const data = await fetchBooks(pageSize, pageNum, selectedCategories, sortBy);
+        setBooks(data.books);
+        setTotalItems(data.totalBooks);
+        console.log(data);
+    } catch (error) {
+        setError((error as Error).message);
+    } finally {
+        setLoading(false);
+    }
+    };
 
-            const response = await fetch(`https://localhost:5000/api/book?pageSize=${pageSize}&pageNum=${pageNum}&sortBy=${sortBy}${selectedCategories.length ? `&${categoryParams}` : ''}`);
-            const data = await response.json();
-            setBooks(data.books);
-            setTotalItems(data.totalBooks)
+    loadBooks();
+    
+}, [pageSize, pageNum, sortBy, selectedCategories]);
 
-        };
-        fetchBooks();
-    }, [pageSize, pageNum, sortBy, selectedCategories]);
+    if (loading) return <p>Loading projects...</p>
+    if (error) return <p className="text-red-500">Error: {error}</p>;
 
     return (
         <>
@@ -54,56 +65,38 @@ function BookList({selectedCategories}:{selectedCategories: string[]}) {
                 </div>
         
         )}
-        <br />
-        <div className="d-flex justify-content-center align-items-center gap-2 mt-3">
+    <br />
 
-    <button
-        className="btn btn-secondary"
-        disabled={pageNum === 1}
-        onClick={() => setPageNum(pageNum - 1)}
-    >Previous</button>
+    <p>totalItems: {totalItems}</p>
+    <p>pageSize: {pageSize}</p>
+    <p>totalPages: {totalPages}</p>
 
-    {[...Array(totalPages)].map((_, i) => (
-        <button key={i + 1} className={`btn ${pageNum === i + 1 ? 'btn-dark' : 'btn-outline-dark'}`} onClick={() => setPageNum(i + 1)} disabled={pageNum === i + 1}>
-        {i + 1}</button>))}
+        <Pagination
+            currentPage={pageNum}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            onPageChange={setPageNum}
+            onPageSizeChange={(newSize) => {
+                setPageSize(newSize);
+                setPageNum(1);
+            }}
+        />
 
-    <button
-        className="btn btn-secondary"
-        disabled={pageNum === totalPages}
-        onClick={() => setPageNum(pageNum + 1)}>Next</button>
-</div>
-<div className="text-center mt-3">
-<label className="me-2">Results per page:</label>
-<select
-    className="form-select d-inline w-auto"
-    value={pageSize}
-    onChange={(p) => {
-    setPageSize(Number(p.target.value));
-    setPageNum(1);
-    }}>
-    <option value="1">1</option>
-    <option value="5">5</option>
-    <option value="10">10</option>
-    <option value="15">15</option>
-    <option value="20">20</option>
-</select>
-</div>
 
-<br />
-
-<div className="text-center mt-3">
-    <label className="me-2">Sort by title:</label>
-    <select
-        className="form-select d-inline w-auto"
-        value={sortBy}
-        onChange={(e) => {
-        setSortBy(e.target.value);
-        setPageNum(1);
-        }}>
-        <option value="titleAsc">A to Z</option>
-        <option value="titleDesc">Z to A</option>
-    </select>
-</div>
+    <br />
+    <div className="text-center mt-3">
+        <label className="me-2">Sort by title:</label>
+        <select
+            className="form-select d-inline w-auto"
+            value={sortBy}
+            onChange={(e) => {
+            setSortBy(e.target.value);
+            setPageNum(1);
+            }}>
+            <option value="titleAsc">A to Z</option>
+            <option value="titleDesc">Z to A</option>
+        </select>
+    </div>
 
 <br />
         </>
